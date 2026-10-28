@@ -41,7 +41,7 @@ class StatisticsService:
             sort_key = sort_by_assists
         else:
             sort_key= sort_by_points
-
+        #there has to be a better way to do this?
         sorted_players = sorted(
             self._players,
             reverse=True,
