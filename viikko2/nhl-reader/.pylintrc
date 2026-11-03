@@ -1,0 +1,11 @@
+[FORMAT]
+max-line-length=100
+indent-string='    '
+
+[REFACTORING]
+max-nested-blocks=2
+
+[DESIGN]
+max-statements=20
+max-locals=10
+min-public-methods=1
