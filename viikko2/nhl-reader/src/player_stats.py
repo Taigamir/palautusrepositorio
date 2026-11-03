@@ -11,3 +11,8 @@ class PlayerStats:
         players = self._reader.get_players()
         matching = [p for p in players if p.nationality == nationality]
         return sorted(matching, key=lambda p: p.points, reverse=True)
+
+    def top_goal_scorers(self, how_many):
+        """Palauttaa how_many eniten maaleja tehnyttä pelaajaa maalimäärän mukaan laskevassa järjestyksessä"""
+        players = self._reader.get_players()
+        return sorted(players, key=lambda p: p.goals, reverse=True)[:how_many]
