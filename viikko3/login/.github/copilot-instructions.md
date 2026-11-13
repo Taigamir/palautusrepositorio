@@ -5,15 +5,15 @@
 This project is a small Flask application with Robot Framework Browser acceptance tests.
 
 - Install dependencies for the project and dev/test tooling:
-  `cd /home/taiga/koulu/palautusrepositorio/viikko3/login && uv sync --group dev`
+  `cd ~/login && uv sync --group dev`
 - Start the Flask app locally:
-  `cd /home/taiga/koulu/palautusrepositorio/viikko3/login && uv run python src/index.py`
+  `cd ~/login && uv run python src/index.py`
 - Run the whole Robot suite:
-  `cd /home/taiga/koulu/palautusrepositorio/viikko3/login && uv run robot src/tests`
+  `cd ~/login && uv run robot src/tests`
 - Run a single Robot file:
-  `cd /home/taiga/koulu/palautusrepositorio/viikko3/login && uv run robot src/tests/login.robot`
+  `cd ~/login && uv run robot src/tests/login.robot`
 - Run a single test case within a file:
-  `cd /home/taiga/koulu/palautusrepositorio/viikko3/login && uv run robot -t "Login With Correct Credentials" src/tests/login.robot`
+  `cd ~/login && uv run robot -t "Login With Correct Credentials" src/tests/login.robot`
 
 There is no dedicated lint, formatting, or type-check command configured in `pyproject.toml`; the project relies on the Robot Browser tests as the validation layer for behavior.
 
