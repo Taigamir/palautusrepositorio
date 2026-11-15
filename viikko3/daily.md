@@ -1,0 +1,5 @@
+Hyvä Daily Scrum on tiivis ja sellainen että kaikki on keskittyneenä yhteiseen tavoitteeseen 15 minuuttia. se ei ole esimiehelle pidettävä raportointitilaisuus joten voi olla chilli ja avoin. Se toimii parhaiten silloin, kun tiimi kokoontuu päivittäin samaan aikaan ja keskitytään sprintin tavoitteisiin
+
+Onnistuneesit katse olisi tulevassa: mitä teemme seuraavien 24 tunnin aikana, jotta pääsemme lähemmäs tavoitettamme? Perinteisen "eilen–tänään–esteet"-kaavan sijaan parmepi käydä läpi tehtävätaulua vaikka oikealta vasemmalle. Näin keskitytään ensisijaisesti työn alla olevien tehtävien valmiiksi saamiseen eikä uusien aloittamiseen.
+
+Hyvä Daily Scrumin tarvitsee myös turvallisen ilmapiirin, jossa esteet ja avuntarve nostetaan esiin heti ilman pelkoa arvostelusta. Keskustelu pysyy napakkana. Jos jokin ongelma vaatii syvempää ratkaisua, sille sovitaan erillinen keskustelu varsinaisen palaverin jälkeen. Lopputuloksena jokainen tiimin jäsen poistuu tilaisuudesta selkeällä käsityksellä siitä, mikä on päivän tärkein prioriteetti ja miten oma työ kytkeytyy muiden tekemiseen. Tärkeä että kaikki pysyvät samalla sivulla about.
