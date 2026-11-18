@@ -31,3 +31,10 @@ The implementation is intentionally small and partly TDD scaffolding: `Ostoskori
 - `Ostos` is the quantity-bearing cart line: add multiple units by changing `_lukumaara`, and keep quantities from becoming negative. `Ostoskori.ostokset()` is the list-of-lines view of the cart.
 - Keep cart aggregation in `Ostoskori`: `tavaroita_korissa()` sums quantities, `hinta()` sums line prices, and adding the same product should update or locate its existing `Ostos` rather than create duplicate cart lines.
 - Tests use `unittest.TestCase` for setup and assertions, while pytest is the configured runner.
+
+## Rules
+
+- Tests executed with uv run pytest
+- Code of ostos.py and tuote.py should not be changed
+- Tests should not be edited unless explicitly asked
+- Always implement absolutely minimal code that makes the tests pass

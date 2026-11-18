@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 from kauppa import Kauppa
 from tuote import Tuote
 
@@ -26,10 +26,17 @@ class TestKauppa(unittest.TestCase):
 
         self.pankki_mock.tilisiirto.assert_called()
 
+    def test_poista_korista_toimii(self):
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.poista_korista(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with(
+            "pekka", 42, "12345", "33333-44455", 0
+        )
+
     def test_maksettaessa_tilisiirto_kutsuu_oikeilla_parametreilla(self):
         self.kauppa.lisaa_koriin(1)
         self.kauppa.tilimaksu("pekka", "12345")
-
         self.pankki_mock.tilisiirto.assert_called_with(
             "pekka", 42, "12345", "33333-44455", 5
         )
@@ -57,3 +64,23 @@ class TestKauppa(unittest.TestCase):
         self.pankki_mock.tilisiirto.assert_called_with(
             "pekka", 42, "12345", "33333-44455", 5
         )
+
+    def test_aloita_asiointi_tyhjentaa_ostoskorin(self):
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with(
+            "pekka", 42, "12345", "33333-44455", 3
+        )
+
+    def test_kauppa_pyytaa_uuden_viitenumeron_joka_maksutapahtumalle(self):
+        self.viitegeneraattori_mock.uusi.side_effect = [42, 43]
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+        kutsut = self.pankki_mock.tilisiirto.call_args_list
+        self.assertEqual(kutsut[0].args[1], 42)
+        self.assertEqual(kutsut[1].args[1], 43)
