@@ -1,0 +1,194 @@
+[1mdiff --git a/viikko4/verkkokauppa/src/tests/kauppa_test.py b/viikko4/verkkokauppa/src/tests/kauppa_test.py[m
+[1mindex bec0c0b..532ad26 100644[m
+[1m--- a/viikko4/verkkokauppa/src/tests/kauppa_test.py[m
+[1m+++ b/viikko4/verkkokauppa/src/tests/kauppa_test.py[m
+[36m@@ -1,146 +1,59 @@[m
+ import unittest[m
+[31m-from unittest.mock import Mock, ANY[m
+[32m+[m[32mfrom unittest.mock import Mock[m
+ from kauppa import Kauppa[m
+[31m-from viitegeneraattori import Viitegeneraattori[m
+[31m-from varasto import Varasto[m
+ from tuote import Tuote[m
+ [m
+ class TestKauppa(unittest.TestCase):[m
+[31m-    def test_maksettaessa_ostos_pankin_metodia_tilisiirto_kutsutaan(self):[m
+[31m-        pankki_mock = Mock()[m
+[31m-        viitegeneraattori_mock = Mock()[m
+[31m-[m
+[31m-        # palautetaan aina arvo 42[m
+[31m-        viitegeneraattori_mock.uusi.return_value = 42[m
+[31m-[m
+[31m-        varasto_mock = Mock()[m
+[31m-[m
+[31m-        # tehdään toteutus saldo-metodille[m
+[31m-        def varasto_saldo(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return 10[m
+[31m-[m
+[31m-        # tehdään toteutus hae_tuote-metodille[m
+[31m-        def varasto_hae_tuote(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return Tuote(1, "maito", 5)[m
+[31m-[m
+[31m-        # otetaan toteutukset käyttöön[m
+[31m-        varasto_mock.saldo.side_effect = varasto_saldo[m
+[31m-        varasto_mock.hae_tuote.side_effect = varasto_hae_tuote[m
+[32m+[m[32m    def setUp(self):[m
+[32m+[m[32m        self.pankki_mock = Mock()[m
+[32m+[m[32m        self.viitegeneraattori_mock = Mock()[m
+[32m+[m[32m        self.viitegeneraattori_mock.uusi.return_value = 42[m
+[32m+[m[32m        self.varasto_mock = Mock()[m
+[32m+[m[32m        self.varasto_mock.saldo.side_effect = {1: 10, 2: 10, 3: 0}.get[m
+[32m+[m[32m        self.varasto_mock.hae_tuote.side_effect = {[m
+[32m+[m[32m            1: Tuote(1, "maito", 5),[m
+[32m+[m[32m            2: Tuote(2, "leipä", 3),[m
+[32m+[m[32m            3: Tuote(3, "Olut", 4),[m
+[32m+[m[32m        }.get[m
+[32m+[m[32m        self.kauppa = Kauppa([m
+[32m+[m[32m            self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock[m
+[32m+[m[32m        )[m
+[32m+[m[32m        self.kauppa.aloita_asiointi()[m
+ [m
+[31m-        # alustetaan kauppa[m
+[31m-        kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)[m
+[31m-[m
+[31m-        # tehdään ostokset[m
+[31m-        kauppa.aloita_asiointi()[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.tilimaksu("pekka", "12345")[m
+[32m+[m[32m    def test_maksettaessa_ostos_pankin_metodia_tilisiirto_kutsutaan(self):[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.tilimaksu("pekka", "12345")[m
+ [m
+[31m-        # varmistetaan, että metodia tilisiirto on kutsuttu[m
+[31m-        pankki_mock.tilisiirto.assert_called()[m
+[31m-        # toistaiseksi ei välitetä kutsuun liittyvistä argumenteista[m
+[32m+[m[32m        self.pankki_mock.tilisiirto.assert_called()[m
+ [m
+     def test_maksettaessa_tilisiirto_kutsuu_oikeilla_parametreilla(self):[m
+[31m-        pankki_mock = Mock()[m
+[31m-        viitegeneraattori_mock = Mock()[m
+[31m-        viitegeneraattori_mock.uusi.return_value = 42[m
+[31m-        varasto_mock = Mock()[m
+[31m-[m
+[31m-        def varasto_saldo(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return 10[m
+[31m-[m
+[31m-        def varasto_hae_tuote(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return Tuote(1, "maito", 5)[m
+[31m-[m
+[31m-        varasto_mock.saldo.side_effect = varasto_saldo[m
+[31m-        varasto_mock.hae_tuote.side_effect = varasto_hae_tuote[m
+[31m-[m
+[31m-        kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)[m
+[31m-        kauppa.aloita_asiointi()[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.tilimaksu("pekka", "12345")[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.tilimaksu("pekka", "12345")[m
+ [m
+[31m-        pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)[m
+[32m+[m[32m        self.pankki_mock.tilisiirto.assert_called_with([m
+[32m+[m[32m            "pekka", 42, "12345", "33333-44455", 5[m
+[32m+[m[32m        )[m
+ [m
+     def test_pystyy_ostaa_kahta_eri_tuotetta(self):[m
+[31m-        pankki_mock = Mock()[m
+[31m-        viitegeneraattori_mock = Mock()[m
+[31m-        viitegeneraattori_mock.uusi.return_value = 42[m
+[31m-        varasto_mock = Mock()[m
+[31m-[m
+[31m-        def varasto_saldo(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return 10[m
+[31m-            if tuote_id == 2:[m
+[31m-                return 10[m
+[31m-[m
+[31m-        def varasto_hae_tuote(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return Tuote(1, "maito", 5)[m
+[31m-            if tuote_id == 2:[m
+[31m-                return Tuote(2, "leipä", 3)[m
+[31m-[m
+[31m-        varasto_mock.saldo.side_effect = varasto_saldo[m
+[31m-        varasto_mock.hae_tuote.side_effect = varasto_hae_tuote[m
+[31m-[m
+[31m-        kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)[m
+[31m-        kauppa.aloita_asiointi()[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.lisaa_koriin(2)[m
+[31m-        kauppa.tilimaksu("pekka", "12345")[m
+[31m-        pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 8)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(2)[m
+[32m+[m[32m        self.kauppa.tilimaksu("pekka", "12345")[m
+[32m+[m[32m        self.pankki_mock.tilisiirto.assert_called_with([m
+[32m+[m[32m            "pekka", 42, "12345", "33333-44455", 8[m
+[32m+[m[32m        )[m
+ [m
+     def test_ostetaan_kaksi_samaa_tuotetta(self):[m
+[31m-        pankki_mock = Mock()[m
+[31m-        viitegeneraattori_mock = Mock()[m
+[31m-        viitegeneraattori_mock.uusi.return_value = 42[m
+[31m-        varasto_mock = Mock()[m
+[31m-[m
+[31m-        def varasto_saldo(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return 10[m
+[31m-[m
+[31m-        def varasto_hae_tuote(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return Tuote(1, "maito", 5)[m
+[31m-[m
+[31m-        varasto_mock.saldo.side_effect = varasto_saldo[m
+[31m-        varasto_mock.hae_tuote.side_effect = varasto_hae_tuote[m
+[31m-[m
+[31m-        kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)[m
+[31m-        kauppa.aloita_asiointi()[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.tilimaksu("pekka", "12345")[m
+[31m-        pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 10)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.tilimaksu("pekka", "12345")[m
+[32m+[m[32m        self.pankki_mock.tilisiirto.assert_called_with([m
+[32m+[m[32m            "pekka", 42, "12345", "33333-44455", 10[m
+[32m+[m[32m        )[m
+ [m
+     def test_ostetaan_loppuunmyynty_tuote(self):[m
+[31m-        pankki_mock = Mock()[m
+[31m-        viitegeneraattori_mock = Mock()[m
+[31m-        viitegeneraattori_mock.uusi.return_value = 42[m
+[31m-        varasto_mock = Mock()[m
+[31m-[m
+[31m-        def varasto_saldo(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return 10[m
+[31m-            if tuote_id == 3:[m
+[31m-                return 0[m
+[31m-[m
+[31m-        def varasto_hae_tuote(tuote_id):[m
+[31m-            if tuote_id == 1:[m
+[31m-                return Tuote(1, "maito", 5)[m
+[31m-            if tuote_id == 3:[m
+[31m-                return Tuote(3, "Olut", 4)[m
+[31m-[m
+[31m-        varasto_mock.saldo.side_effect = varasto_saldo[m
+[31m-        varasto_mock.hae_tuote.side_effect = varasto_hae_tuote[m
+[31m-[m
+[31m-        kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)[m
+[31m-        kauppa.aloita_asiointi()[m
+[31m-        kauppa.lisaa_koriin(1)[m
+[31m-        kauppa.lisaa_koriin(3)[m
+[31m-        kauppa.tilimaksu("pekka", "12345")[m
+[31m-        pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(1)[m
+[32m+[m[32m        self.kauppa.lisaa_koriin(3)[m
+[32m+[m[32m        self.kauppa.tilimaksu("pekka", "12345")[m
+[32m+[m[32m        self.pankki_mock.tilisiirto.assert_called_with([m
+[32m+[m[32m            "pekka", 42, "12345", "33333-44455", 5[m
+[32m+[m[32m        )[m
