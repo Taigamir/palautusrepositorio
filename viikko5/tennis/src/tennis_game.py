@@ -2,7 +2,6 @@ POINT_NAMES = ["Love", "Fifteen", "Thirty", "Forty"]
 TIE_SCORE_NAMES = ["Love-All", "Fifteen-All", "Thirty-All"]
 DEUCE_LABEL = "Deuce"
 ENDGAME_THRESHOLD = 4
-ADVANTAGE_MARGIN = 1
 WIN_MARGIN = 2
 
 class TennisGame:
